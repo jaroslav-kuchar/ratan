@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Compute Ratios\n#'\n#' @param data \\code{data.frame} with input data\n#' @param groupBy grouping entries by specific column name\n#' @param dimensions vector with column names used for computing ratios\n#' @param target column name with target numeric values to compute rarios\n#' @param distanceFromMean boolean to compute only ratios or also distance from mean value in column\n#' @return data frame with ratios\n#' @import data.table\n#' @export\n#' @examples\n#' library(\"ratan\")\n#' r <- computeRatios(\n#'     as.data.frame(Titanic),\n#'     \"Class\",\n#'     c(\"Sex\", \"Age\", \"Survived\"),\n#'     \"Freq\")\ncomputeRatios <- function(data, groupBy, dimensions, target, distanceFromMean = TRUE) {\n  # join all column names for data frame view\n  selectedColumns <- c(groupBy, dimensions, target)\n  # generate view on data\n  data <- data[,selectedColumns]\n  # get names of groups\n  groups <- unique(data[,groupBy])\n\n  # initialize rows\n  rows <- list()\n  # iterate over group\n  for(group in sort(groups)){\n    # get data for specific group\n    groupData <- data[which(data[,groupBy]==group),]\n    # compute ratios for all combinations of selected dimensios\n    row <- .computeRatios(dimensions, groupData, target)\n    rows[[length(rows)+1]] <- row\n  }\n  # convert to a data frame\n  df <- rbindlist(rows, fill=TRUE)\n  df <- as.data.frame(df)\n  rownames(df) <- sort(groups)\n  # remove NAs\n  df[is.na(df)] <- 0\n  # sort alphabetically according to the names of rows and columns\n  df <- df[order(row.names(df), decreasing = TRUE),]\n  df <- df[,order(colnames(df), decreasing = FALSE)]\n\n  # compute distance from mean value in column\n  if(distanceFromMean){\n    means <- apply(df, 2, mean)\n    for(a in colnames(df)){\n      df[,a] <- df[,a] - means[a]\n    }\n  }\n  df\n}\n\n.computeRatios <- function(dims, data, target, prev=\"\"){\n  # initialize output\n  out <- list()\n  # total sum of current view\n  totalSum <- sum(data[,target])\n  for(d in dims){\n    for(v in unique(data[,d])){\n      ps <- sum(data[which(data[,d]==v), target])\n      name <- paste(prev,\"/\",d,\"=\",v,sep = \"\")\n      out[[name]] <- ps/totalSum\n      out <- c(out,.computeRatios(setdiff(dims,d), data[which(data[,d]==v),], target, name))\n    }\n  }\n  out\n}\n",
+    "created" : 1488488378609.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3169025638",
+    "id" : "51126F6",
+    "lastKnownWriteTime" : 1488489222,
+    "last_content_update" : 1488489222812,
+    "path" : "~/Data/Projects/OBEU/ratan/R/computeRatios.R",
+    "project_path" : "R/computeRatios.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

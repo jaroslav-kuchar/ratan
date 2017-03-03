@@ -1,0 +1,13 @@
+Package: ratan
+Type: Package
+Title: Ratio Analysis
+Version: 0.1.0
+Authors@R: person("Jaroslav", "Kuchar", email = "jaroslav.kuchar@gmail.com", role = c("aut", "cre"))
+Author: Jaroslav Kuchar [aut, cre]
+Maintainer: Jaroslav Kuchar <jaroslav.kuchar@gmail.com>
+Description: Ratio analysis mainly to compute and visualize finacial ratios. 
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: data.table, plotly
+RoxygenNote: 6.0.1
