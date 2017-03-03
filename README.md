@@ -1,5 +1,8 @@
 # ratan
 
+[![Build Status](https://travis-ci.org/jaroslav-kuchar/ratan.svg?branch=master)](https://travis-ci.org/jaroslav-kuchar/ratan)
+
+
 Ratio analysis mainly to compute and visualize finacial ratios.
 
 ## Installation
